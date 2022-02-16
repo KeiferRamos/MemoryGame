@@ -1,10 +1,25 @@
 import React, { createContext, useContext } from "react";
 import { useState, useEffect } from "react";
+import {
+  FaTwitter,
+  FaTiktok,
+  FaTelegramPlane,
+  FaPaypal,
+  FaGoogle,
+  FaGithub,
+  FaApple,
+  FaYoutube,
+} from "react-icons/fa";
 
 const Imgs = [
-  "https://www.foxyfolksy.com/wp-content/uploads/2015/05/Sizzling-Sisig-640.jpg",
-  "https://i.pinimg.com/originals/74/21/0a/74210a9943101beb01df5cba885465a3.jpg",
-  "https://lolakusinera.com/wp-content/uploads/2019/01/adobo-chicken.jpg",
+  <FaTwitter />,
+  <FaTelegramPlane />,
+  <FaTiktok />,
+  <FaPaypal />,
+  <FaGoogle />,
+  <FaGithub />,
+  <FaApple />,
+  <FaYoutube />,
 ];
 
 const imgs = [];
@@ -38,14 +53,18 @@ export const Content = () => {
   return (
     <div className="pair-the-pic">
       <p className="title">
-        {correctItem.length < 3 ? "Pair the Pic Game" : "You won"}
+        {correctItem.length < Imgs.length ? "Pair the Pic Game" : "You won"}
       </p>
       <div className="main-container">
         {images.map((image) => (
           <MainContent key={image.id} {...image} />
         ))}
       </div>
-      <div style={{ display: `${correctItem.length == 3 ? "block" : "none"}` }}>
+      <div
+        style={{
+          display: `${correctItem.length == Imgs.length ? "block" : "none"}`,
+        }}
+      >
         <button onClick={() => window.location.reload(false)}>
           Play again
         </button>
@@ -86,7 +105,7 @@ const MainContent = ({ content, id }) => {
 
   return (
     <div className="img-container" onClick={() => SelectItem()}>
-      {hasSelected ? <img src={content} /> : <div></div>}
+      {hasSelected ? content : <div></div>}
     </div>
   );
 };
