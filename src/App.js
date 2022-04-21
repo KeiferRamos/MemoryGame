@@ -27,11 +27,9 @@ const GlobalContext = createContext();
 
 function App({ Content }) {
   const [selected, setSelected] = useState([]);
-  const [correctItem, setCorrectItem] = useState([]);
+  const [done, setDone] = useState([]);
   return (
-    <GlobalContext.Provider
-      value={{ selected, setSelected, correctItem, setCorrectItem }}
-    >
+    <GlobalContext.Provider value={{ selected, setSelected, done, setDone }}>
       {Content}
     </GlobalContext.Provider>
   );
@@ -39,7 +37,7 @@ function App({ Content }) {
 
 export const Content = () => {
   const [images, setImages] = useState([]);
-  const { correctItem } = useContext(GlobalContext);
+  const { done } = useContext(GlobalContext);
 
   useEffect(() => {
     for (var i = 0; i < 2; i++) {
@@ -53,42 +51,39 @@ export const Content = () => {
   return (
     <div className="pair-the-pic">
       <p className="title">
-        {correctItem.length < Imgs.length ? "Pair the Pic Game" : "You won"}
+        {done.length < Imgs.length ? "Pair the Pic Game" : "You won"}
       </p>
       <div className="main-container">
         {images.map((image) => (
           <MainContent key={image.id} {...image} />
         ))}
       </div>
-      <div
-        style={{
-          display: `${correctItem.length == Imgs.length ? "block" : "none"}`,
-        }}
-      >
-        <button onClick={() => window.location.reload(false)}>
-          Play again
-        </button>
-      </div>
+      {done.length == Imgs.length && (
+        <div>
+          <button onClick={() => window.location.reload(false)}>
+            Play again
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
 const MainContent = ({ content, id }) => {
   const [hasSelected, setHasSelected] = useState(false);
-  const { selected, setSelected, correctItem, setCorrectItem } =
-    useContext(GlobalContext);
+  const { selected, setSelected, done, setDone } = useContext(GlobalContext);
 
   useEffect(() => {
     if (selected.length == 2) {
       setTimeout(() => {
         if (selected[0].content == selected[1].content) {
-          setCorrectItem([...correctItem, selected[0].content]);
+          setDone([...done, selected[0].content]);
         } else {
           if (selected[0].id == id || selected[1].id == id) {
             setHasSelected(false);
           }
         }
-        if (correctItem.includes(content)) {
+        if (done.includes(content)) {
           setHasSelected(true);
         }
         setSelected([]);
